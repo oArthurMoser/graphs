@@ -58,7 +58,6 @@ graphs/
     │   ├── edge.h
     │   ├── matrix_graph.h / matrix_graph.cpp
     │   └── list_graph.h / list_graph.cpp
-    └── unit_tests/            (optional)
 ```
 
 ## Build and run

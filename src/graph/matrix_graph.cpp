@@ -48,15 +48,13 @@ void MatrixGraph::printGraph()
             << ", Weighted: "
             << (isWeighted_ ? "yes" : "no")
             << ") [MatrixGraph]\n";
+
+  const int minColumnsPerRow = vertexCount() > 1 ? vertexCount() - 1 : 1;
   for (size_t i = 0; i < vertexLabels_.size(); ++i)
   {
     std::cout << "[" << i << "] " << vertexLabels_[i] << " -> ";
     std::vector<int> n = neighbors(static_cast<int>(i));
-    if (n.empty())
-    {
-      std::cout << "(no connections)\n";
-      continue;
-    }
+
     bool first = true;
     for (int dest : n)
     {
@@ -71,6 +69,17 @@ void MatrixGraph::printGraph()
         std::cout << " [weight: " << edgeWeight(static_cast<int>(i), dest) << "]";
       }
     }
+
+    for (int printed = static_cast<int>(n.size()); printed < minColumnsPerRow; ++printed)
+    {
+      if (!first)
+      {
+        std::cout << ", ";
+      }
+      first = false;
+      std::cout << "(-1)";
+    }
+
     std::cout << "\n";
   }
 }

@@ -22,7 +22,7 @@ int readVertexCount()
 
   while (true)
   {
-    std::cout << "Digite a quantidade de vertices (min 1, max 100000): ";
+    std::cout << "Digite a quantidade de vertices (min: " << kMinVertices << ", max: " << kMaxVertices << "): ";
 
     if (!(std::cin >> vertexCount))
     {

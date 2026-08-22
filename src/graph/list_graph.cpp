@@ -63,7 +63,7 @@ void ListGraph::printGraph()
     std::vector<int> n = neighbors(static_cast<int>(i));
     if (n.empty())
     {
-      std::cout << "(no connections)\n";
+      std::cout << "(-1)\n";
       continue;
     }
     bool first = true;

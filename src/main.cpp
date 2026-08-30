@@ -1,3 +1,5 @@
+#include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -15,7 +17,6 @@ void runNavigationDemo(const std::string &filePath)
   std::cout << " File: " << filePath << "\n";
   std::cout << "====================================================\n\n";
 
-  // 1. Load into MatrixGraph and ListGraph
   std::unique_ptr<MatrixGraph> matrixG = GraphReader::readMatrixGraph(filePath);
   std::unique_ptr<ListGraph> listG = GraphReader::readListGraph(filePath);
 
@@ -33,7 +34,6 @@ void runNavigationDemo(const std::string &filePath)
   listG->printGraph();
   std::cout << "\n";
 
-  // 2. Run BFS on both
   std::cout << "--- BFS Traversal (Start: Vertex 0 / A) ---\n";
   std::cout << "[MatrixGraph] ";
   printBfs(*matrixG, 0);
@@ -41,7 +41,6 @@ void runNavigationDemo(const std::string &filePath)
   printBfs(*listG, 0);
   std::cout << "\n";
 
-  // 3. Run DFS on both
   std::cout << "--- DFS Traversal (Start: Vertex 0 / A) ---\n";
   std::cout << "[MatrixGraph] ";
   printDfs(*matrixG, 0);
@@ -86,34 +85,94 @@ void runDijkstraDemo(const std::string &filePath)
   std::cout << "\n";
 }
 
-void runBasicOperationsDemo()
+void runLargeGraphDemo(const std::string &filePath)
 {
   std::cout << "====================================================\n";
-  std::cout << " DEMO 3: Basic Graph Operations (Insert, Query, Remove)\n";
+  std::cout << " DEMO 3: Performance & Traversal on Large Graph\n";
+  std::cout << " File: " << filePath << "\n";
   std::cout << "====================================================\n\n";
 
-  MatrixGraph mg(false, true); // Undirected, weighted
-  mg.insertVertex("Alpha");
-  mg.insertVertex("Beta");
-  mg.insertVertex("Gamma");
-  mg.insertEdge(0, 1, 4.5f);
-  mg.insertEdge(1, 2, 7.2f);
+  auto t0 = std::chrono::high_resolution_clock::now();
+  std::unique_ptr<MatrixGraph> matrixG = GraphReader::readMatrixGraph(filePath);
+  auto t1 = std::chrono::high_resolution_clock::now();
+  std::unique_ptr<ListGraph> listG = GraphReader::readListGraph(filePath);
+  auto t2 = std::chrono::high_resolution_clock::now();
 
-  std::cout << "Initial MatrixGraph:\n";
-  mg.printGraph();
+  if (!matrixG || !listG)
+  {
+    std::cerr << "Failed to load large graph.\n";
+    return;
+  }
 
-  std::cout << "\nHas edge (Alpha -> Beta): " << (mg.hasEdge(0, 1) ? "true" : "false") << "\n";
-  std::cout << "Edge weight (Alpha -> Beta): " << mg.edgeWeight(0, 1) << "\n";
-  std::cout << "Vertex count: " << mg.vertexCount() << "\n";
-  std::cout << "Label of vertex 0: " << mg.vertexLabel(0) << "\n";
+  double loadMatrixMs = std::chrono::duration<double, std::milli>(t1 - t0).count();
+  double loadListMs = std::chrono::duration<double, std::milli>(t2 - t1).count();
 
-  std::cout << "\nRemoving edge (Beta <-> Gamma)...\n";
-  mg.removeEdge(1, 2);
-  mg.printGraph();
+  std::cout << "Vertices in graph: " << matrixG->vertexCount() << "\n";
+  std::cout << "Load Time -> MatrixGraph: " << loadMatrixMs << " ms | ListGraph: " << loadListMs << " ms\n\n";
 
-  std::cout << "\nRemoving vertex 0 (Alpha)...\n";
-  mg.removeVertex(0);
-  mg.printGraph();
+  // Measure BFS
+  auto bfsStartM = std::chrono::high_resolution_clock::now();
+  std::vector<int> bfsOrderM = bfs(*matrixG, 0);
+  auto bfsEndM = std::chrono::high_resolution_clock::now();
+
+  auto bfsStartL = std::chrono::high_resolution_clock::now();
+  std::vector<int> bfsOrderL = bfs(*listG, 0);
+  auto bfsEndL = std::chrono::high_resolution_clock::now();
+
+  std::cout << "BFS reached " << bfsOrderM.size() << " vertices.\n";
+  std::cout << "BFS Time -> MatrixGraph: "
+            << std::chrono::duration<double, std::micro>(bfsEndM - bfsStartM).count() << " us | ListGraph: "
+            << std::chrono::duration<double, std::micro>(bfsEndL - bfsStartL).count() << " us\n\n";
+
+  // Measure DFS
+  auto dfsStartM = std::chrono::high_resolution_clock::now();
+  std::vector<int> dfsOrderM = dfs(*matrixG, 0);
+  auto dfsEndM = std::chrono::high_resolution_clock::now();
+
+  auto dfsStartL = std::chrono::high_resolution_clock::now();
+  std::vector<int> dfsOrderL = dfs(*listG, 0);
+  auto dfsEndL = std::chrono::high_resolution_clock::now();
+
+  std::cout << "DFS reached " << dfsOrderM.size() << " vertices.\n";
+  std::cout << "DFS Time -> MatrixGraph: "
+            << std::chrono::duration<double, std::micro>(dfsEndM - dfsStartM).count() << " us | ListGraph: "
+            << std::chrono::duration<double, std::micro>(dfsEndL - dfsStartL).count() << " us\n\n";
+
+  // Measure Dijkstra
+  auto dijkStartM = std::chrono::high_resolution_clock::now();
+  DijkstraResult dijkM = dijkstra(*matrixG, 0);
+  auto dijkEndM = std::chrono::high_resolution_clock::now();
+
+  auto dijkStartL = std::chrono::high_resolution_clock::now();
+  DijkstraResult dijkL = dijkstra(*listG, 0);
+  auto dijkEndL = std::chrono::high_resolution_clock::now();
+
+  std::cout << "Dijkstra Time -> MatrixGraph: "
+            << std::chrono::duration<double, std::micro>(dijkEndM - dijkStartM).count() << " us | ListGraph: "
+            << std::chrono::duration<double, std::micro>(dijkEndL - dijkStartL).count() << " us\n\n";
+
+  // Sample paths
+  std::cout << "Sample Shortest Paths from Origin [V0]:\n";
+  int targets[] = {10, matrixG->vertexCount() / 2, matrixG->vertexCount() - 1};
+  for (int target : targets)
+  {
+    if (target < matrixG->vertexCount())
+    {
+      std::cout << "  -> Target [" << target << "] " << matrixG->vertexLabel(target)
+                << " | Shortest Distance: " << dijkL.distances[static_cast<size_t>(target)]
+                << " | Path: ";
+      std::vector<int> path = dijkL.getPathTo(target);
+      for (size_t p = 0; p < path.size(); ++p)
+      {
+        if (p > 0)
+        {
+          std::cout << " -> ";
+        }
+        std::cout << matrixG->vertexLabel(path[p]);
+      }
+      std::cout << "\n";
+    }
+  }
   std::cout << "\n";
 }
 
@@ -121,7 +180,8 @@ int main()
 {
   runNavigationDemo("graph_examples/example_navigation.txt");
   runDijkstraDemo("graph_examples/example_dijkstra.txt");
-  runBasicOperationsDemo();
+  runLargeGraphDemo("graph_examples/large_graph.txt");
+  runLargeGraphDemo("graph_examples/huge_graph.txt");
 
   return 0;
 }

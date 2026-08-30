@@ -14,14 +14,18 @@ All algorithms (**BFS, DFS, Dijkstra**) are decoupled from the concrete represen
 ## Architecture & Design
 
 ### Abstract Base Class `Graph`
+
 Defines the shared interface and configuration flags:
+
 ```cpp
 Graph(bool isDirected, bool isWeighted);
 ```
+
 - `isDirected`: Controls whether edges are one-way (`true`) or bidirectional (`false`).
 - `isWeighted`: Controls whether edge weights are preserved or defaulted to `1.0`.
 
 ### Core Operations
+
 ```cpp
 bool insertVertex(std::string label);
 bool removeVertex(int index);
@@ -47,6 +51,7 @@ Ao Ad Ap
 Ao Ad Ap
 ...
 ```
+
 - `V`: Number of vertices.
 - `A`: Number of edges.
 - `D`: `1` if directed, `0` if undirected.
@@ -63,6 +68,7 @@ std::unique_ptr<ListGraph> lg = GraphReader::readListGraph("graph_examples/examp
 ## Algorithms
 
 ### 1. Breadth-First Search (BFS)
+
 ```cpp
 #include "algorithms/search.h"
 
@@ -71,6 +77,7 @@ printBfs(graph, 0);
 ```
 
 ### 2. Depth-First Search (DFS)
+
 ```cpp
 #include "algorithms/search.h"
 
@@ -79,7 +86,9 @@ printDfs(graph, 0);
 ```
 
 ### 3. Dijkstra Shortest Path
+
 Calculates the single-source shortest path, minimum distances, and path reconstructions to all reachable vertices.
+
 ```cpp
 #include "algorithms/dijkstra.h"
 

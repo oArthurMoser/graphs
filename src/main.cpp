@@ -34,18 +34,18 @@ void runNavigationDemo(const std::string &filePath)
   listG->printGraph();
   std::cout << "\n";
 
-  std::cout << "--- BFS Traversal (Start: Vertex 0 / A) ---\n";
+  std::cout << "--- BFS Traversal (Start: Vertex 3 / D) ---\n";
   std::cout << "[MatrixGraph] ";
-  printBfs(*matrixG, 0);
+  printBfs(*matrixG, 3);
   std::cout << "[ListGraph]   ";
-  printBfs(*listG, 0);
+  printBfs(*listG, 3);
   std::cout << "\n";
 
-  std::cout << "--- DFS Traversal (Start: Vertex 0 / A) ---\n";
+  std::cout << "--- DFS Traversal (Start: Vertex 1 / B) ---\n";
   std::cout << "[MatrixGraph] ";
-  printDfs(*matrixG, 0);
+  printDfs(*matrixG, 1);
   std::cout << "[ListGraph]   ";
-  printDfs(*listG, 0);
+  printDfs(*listG, 1);
   std::cout << "\n";
 }
 

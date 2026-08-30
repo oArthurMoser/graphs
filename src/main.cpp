@@ -180,6 +180,12 @@ int main()
 {
   runNavigationDemo("graph_examples/example_navigation.txt");
   runDijkstraDemo("graph_examples/example_dijkstra.txt");
+  
+  std::cout << "====================================================\n";
+  std::cout << " DEMO: Medium-Sized Graph (10 Vertices, 14 Edges)\n";
+  std::cout << "====================================================\n\n";
+  runDijkstraDemo("graph_examples/medium_graph.txt");
+
   runLargeGraphDemo("graph_examples/large_graph.txt");
   runLargeGraphDemo("graph_examples/huge_graph.txt");
 

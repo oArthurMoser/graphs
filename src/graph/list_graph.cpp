@@ -180,6 +180,15 @@ std::vector<int> ListGraph::neighbors(int vertex)
   return result;
 }
 
+std::string ListGraph::vertexLabel(int index) const
+{
+  if (index < 0 || index >= vertexCount())
+  {
+    return "";
+  }
+  return vertexLabels_[static_cast<size_t>(index)];
+}
+
 int ListGraph::vertexCount() const
 {
   return static_cast<int>(vertexLabels_.size());

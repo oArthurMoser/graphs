@@ -161,6 +161,15 @@ std::vector<int> MatrixGraph::neighbors(int vertex)
   return result;
 }
 
+std::string MatrixGraph::vertexLabel(int index) const
+{
+  if (index < 0 || index >= vertexCount())
+  {
+    return "";
+  }
+  return vertexLabels_[static_cast<size_t>(index)];
+}
+
 int MatrixGraph::vertexCount() const
 {
   return static_cast<int>(vertexLabels_.size());

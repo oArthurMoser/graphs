@@ -1,0 +1,10 @@
+# Navigation example graph from slide S03 (DFS / BFS)
+# Format: V A D P
+6 7 0 0
+0 1
+0 2
+0 3
+1 3
+2 4
+2 5
+4 5

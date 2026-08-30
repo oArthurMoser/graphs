@@ -26,6 +26,7 @@ public:
   bool hasEdge(int origin, int destination) override;
   float edgeWeight(int origin, int destination) override;
   std::vector<int> neighbors(int vertex) override;
+  std::string vertexLabel(int index) const override;
   int vertexCount() const override;
 
 private:

@@ -58,6 +58,10 @@ public:
   // the given vertex. Returns an empty vector if the vertex is invalid.
   virtual std::vector<int> neighbors(int vertex) = 0;
 
+  // Returns the label of the vertex at the given index, or an empty string
+  // if the index is invalid.
+  virtual std::string vertexLabel(int index) const = 0;
+
   // Returns the number of vertices currently in the graph.
   virtual int vertexCount() const = 0;
 

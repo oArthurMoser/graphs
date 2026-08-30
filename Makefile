@@ -4,13 +4,16 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -I src
 BUILD_DIR = build
 SRC_DIR = src
 GRAPH = $(SRC_DIR)/graph
-RANDOM = $(SRC_DIR)/random
+IO = $(SRC_DIR)/io
+ALGORITHMS = $(SRC_DIR)/algorithms
 
 MAIN_SOURCES = $(SRC_DIR)/main.cpp \
                $(GRAPH)/graph.cpp \
                $(GRAPH)/matrix_graph.cpp \
                $(GRAPH)/list_graph.cpp \
-               $(RANDOM)/create.cpp
+               $(IO)/graph_reader.cpp \
+               $(ALGORITHMS)/search.cpp \
+               $(ALGORITHMS)/dijkstra.cpp
 
 MAIN_BINARY = $(BUILD_DIR)/main
 

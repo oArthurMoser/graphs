@@ -1,76 +1,127 @@
-# Graph Project (Basic Graph Library)
+# Graph Library & Algorithms (Parts 1 & 2)
 
-Part 1 of an academic work on graphs: the basic data structure of a graph
-and the fundamental manipulation operations (insert/remove vertices and
-edges, query edges, list neighbors and print the graph).
+Academic graph library in C++17 implementing graph data structures, file loading, search algorithms (BFS & DFS), and shortest path computation (Dijkstra).
 
-Implemented in C++17 using only the STL, with two representations:
+Implemented using only modern standard C++ (C++17) and the STL, supporting both:
 
-- **`MatrixGraph`** — adjacency matrix (`N x N`), edge queries in O(1).
-- **`ListGraph`** — adjacency list (per-vertex list of `Edge`), lower memory
-  usage for sparse graphs, edge queries in O(degree of the vertex).
+- **`MatrixGraph`** — adjacency matrix (`N x N`), edge queries in $O(1)$.
+- **`ListGraph`** — adjacency list (per-vertex list of `Edge`), memory efficient for sparse graphs ($O(|V| + |E|)$).
 
-This project does **not** yet implement search, shortest-path, MST, flow or
-coloring algorithms — those will come in future stages.
+All algorithms (**BFS, DFS, Dijkstra**) are decoupled from the concrete representations and operate polymorphically on the base `Graph` class.
 
-## Design
+---
 
-The abstract base class `Graph` defines the common contract shared by both
-representations. Each graph is created with two fixed configuration flags:
+## Architecture & Design
 
+### Abstract Base Class `Graph`
+Defines the shared interface and configuration flags:
 ```cpp
 Graph(bool isDirected, bool isWeighted);
 ```
+- `isDirected`: Controls whether edges are one-way (`true`) or bidirectional (`false`).
+- `isWeighted`: Controls whether edge weights are preserved or defaulted to `1.0`.
 
-- `isDirected`: if `true`, edges are one-way (origin → destination only).
-  If `false`, every inserted edge also creates the reverse edge.
-- `isWeighted`: if `true`, the weight passed to `insertEdge` is stored and
-  used. If `false`, all existing edges have implicit weight `1`.
-
-## Operations
-
+### Core Operations
 ```cpp
 bool insertVertex(std::string label);
 bool removeVertex(int index);
+std::string vertexLabel(int index) const;
 void printGraph();
-bool insertEdge(int origin, int destination, float weight = 1);
+bool insertEdge(int origin, int destination, float weight = 1.0f);
 bool removeEdge(int origin, int destination);
 bool hasEdge(int origin, int destination);
 float edgeWeight(int origin, int destination);
 std::vector<int> neighbors(int vertex);
+int vertexCount() const;
 ```
 
-Every operation that receives a vertex index validates bounds and returns a
-failure/sentinel value (never crashes) on invalid input.
+---
 
-## Project structure
+## File Format & I/O
+
+The `GraphReader` module parses formatted graph text files:
+
+```text
+V A D P
+Ao Ad Ap
+Ao Ad Ap
+...
+```
+- `V`: Number of vertices.
+- `A`: Number of edges.
+- `D`: `1` if directed, `0` if undirected.
+- `P`: `1` if weighted, `0` if unweighted.
+- Followed by `A` edge lines (`origin destination [weight]`).
+
+```cpp
+std::unique_ptr<MatrixGraph> mg = GraphReader::readMatrixGraph("graph_examples/example_dijkstra.txt");
+std::unique_ptr<ListGraph> lg = GraphReader::readListGraph("graph_examples/example_dijkstra.txt");
+```
+
+---
+
+## Algorithms
+
+### 1. Breadth-First Search (BFS)
+```cpp
+#include "algorithms/search.h"
+
+std::vector<int> order = bfs(graph, 0);
+printBfs(graph, 0);
+```
+
+### 2. Depth-First Search (DFS)
+```cpp
+#include "algorithms/search.h"
+
+std::vector<int> order = dfs(graph, 0);
+printDfs(graph, 0);
+```
+
+### 3. Dijkstra Shortest Path
+Calculates the single-source shortest path, minimum distances, and path reconstructions to all reachable vertices.
+```cpp
+#include "algorithms/dijkstra.h"
+
+DijkstraResult result = dijkstra(graph, 0);
+result.printResult(graph);
+std::vector<int> pathTo4 = result.getPathTo(4);
+```
+
+---
+
+## Project Structure
 
 ```
 graphs/
 ├── Makefile
 ├── README.md
 ├── graph_examples/
-│   └── example1.txt
+│   ├── example_navigation.txt   # Unweighted graph for BFS/DFS demo
+│   ├── example_dijkstra.txt     # Weighted graph for Dijkstra demo
+│   └── example_directed.txt     # Directed weighted example
 └── src/
     ├── main.cpp
+    ├── algorithms/
+    │   ├── search.h / search.cpp       # BFS and DFS
+    │   └── dijkstra.h / dijkstra.cpp   # Dijkstra
     ├── graph/
-    │   ├── graph.h / graph.cpp
-    │   ├── edge.h
+    │   ├── graph.h / graph.cpp         # Base class
+    │   ├── edge.h                      # Edge struct
     │   ├── matrix_graph.h / matrix_graph.cpp
     │   └── list_graph.h / list_graph.cpp
+    └── io/
+        ├── graph_reader.h / graph_reader.cpp # File parser
 ```
 
-## Build and run
+---
 
-Portable across macOS, Linux and Windows (MinGW/MSYS2 or WSL). Only a C++17
-compiler (`g++`/`clang++`) and `make` are required.
+## Build & Run
+
+Portable across macOS, Linux, and Windows (MinGW/MSYS2 or WSL).
 
 ```sh
-make build      # compile the library and main.cpp
-make run        # run the demonstration binary
-make clean      # remove the build/ directory
+make build      # Compile the binary to build/main
+make run        # Run the full automated demonstration
+make clean      # Remove build artifacts
 ```
-
-## License
-
-Academic project.

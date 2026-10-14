@@ -25,13 +25,14 @@ ResultadoColoracao coloracaoOrdemArbitraria(Graph &grafo)
     listaAdjacencia[i] = grafo.neighbors(i);
   }
 
+  // Passo 1: Inicializar todos os vertices como sem cor (-1)
   vector<int> cores(n, -1);
   vector<int> corVisitada(n + 2, -1);
 
-  // Percorre os vertices na ordem arbitraria (0 ate n - 1)
+  // Passo 2: Percorrer os vertices na ordem arbitraria (0 ate n - 1)
   for (int vertice = 0; vertice < n; ++vertice)
   {
-    // Marca cores usadas pelos vizinhos
+    // Passo 3: Marcar cores usadas pelos vizinhos e pegar a primeira disponivel
     for (int vizinho : listaAdjacencia[vertice])
     {
       int cor = cores[vizinho];
@@ -41,7 +42,6 @@ ResultadoColoracao coloracaoOrdemArbitraria(Graph &grafo)
       }
     }
 
-    // Pega a primeira cor disponivel
     int primeiraDisponivel = 0;
     while (primeiraDisponivel < static_cast<int>(corVisitada.size()) && corVisitada[primeiraDisponivel] == vertice)
     {
@@ -51,6 +51,7 @@ ResultadoColoracao coloracaoOrdemArbitraria(Graph &grafo)
     cores[vertice] = primeiraDisponivel;
   }
 
+  // Passo 4: Medir tempo de execucao e preencher o resultado
   auto fim = chrono::high_resolution_clock::now();
   resultado.tempoExecucaoUs = chrono::duration<double, micro>(fim - inicio).count();
   resultado.viavel = true;

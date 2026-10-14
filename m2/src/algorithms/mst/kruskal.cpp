@@ -76,7 +76,7 @@ ResultadoAGM agmKruskal(Graph &grafo)
 
   auto inicio = chrono::high_resolution_clock::now();
 
-  // 1. Coleta todas as arestas unicas (u < v)
+  // Passo 1: Coleta todas as arestas unicas (u < v) para o conjunto de controle Q
   vector<ArestaAGM> conjuntoControleQ;
   for (int u = 0; u < n; ++u)
   {
@@ -90,17 +90,17 @@ ResultadoAGM agmKruskal(Graph &grafo)
     }
   }
 
-  // 2. Ordena as arestas por peso crescente
+  // Passo 2: Ordenar as arestas por peso crescente
   sort(conjuntoControleQ.begin(), conjuntoControleQ.end(), [](const ArestaAGM &a, const ArestaAGM &b) {
     if (a.peso != b.peso) return a.peso < b.peso;
     if (a.u != b.u) return a.u < b.u;
     return a.v < b.v;
   });
 
-  // 3. Inicializa floresta com cada vertice em sua arvore
+  // Passo 3: Inicializar floresta F com cada vertice em sua propria arvore isolada
   FlorestaConjuntosDisjuntos florestaF(n);
 
-  // 4. Seleciona a menor aresta que une arvores diferentes
+  // Passo 4: Selecionar a menor aresta que une arvores diferentes (evita ciclo)
   for (const auto &aresta : conjuntoControleQ)
   {
     if (florestaF.encontrar(aresta.u) != florestaF.encontrar(aresta.v))
@@ -113,6 +113,7 @@ ResultadoAGM agmKruskal(Graph &grafo)
     }
   }
 
+  // Passo 5: Medir tempo de execucao e preencher o resultado
   auto fim = chrono::high_resolution_clock::now();
   resultado.tempoExecucaoUs = chrono::duration<double, micro>(fim - inicio).count();
   resultado.viavel = (florestaF.quantidadeArvores() == 1);

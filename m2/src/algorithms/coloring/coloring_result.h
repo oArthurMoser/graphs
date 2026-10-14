@@ -16,23 +16,29 @@ struct ResultadoColoracao
   double tempoExecucaoUs = 0.0;  // Tempo de execucao em microssegundos
   bool viavel = false;           // Verdadeiro se a coloracao for valida (sem vizinhos com mesma cor)
 
-  // Exibe o resultado formatado no console
+  // Exibe o resultado formatado no console conforme o enunciado
   void imprimirResultado(const vector<string> &rotulos) const
   {
     cout << "[" << nomeAlgoritmo << "]\n";
-    cout << "  - Status: " << (viavel ? "Coloracao valida" : "Falha / Nao encontrada") << "\n";
-    cout << "  - Numero de cores utilizadas: " << quantidadeCores << "\n";
+    if (!viavel)
+    {
+      cout << "  - Status: Nao executado / Inviavel\n";
+      return;
+    }
+
     cout << "  - Tempo de execucao: " << tempoExecucaoUs << " us ("
          << (tempoExecucaoUs / 1000.0) << " ms)\n";
+    cout << "  - Numero de cores utilizadas: " << quantidadeCores << "\n";
 
-    // Requisito: para grafos pequenos (< 10 vertices), exibir a lista de cada vertice e sua cor
-    if (coresVertices.size() < 10 && viavel)
+    // Requisito do enunciado: Para os grafos pequenos (menos de 10 vertices)
+    // tambem devera ser exibida uma lista com os vertices e as cores correspondentes.
+    if (coresVertices.size() < 10)
     {
-      cout << "  - Atribuicao de cores por vertice:\n";
+      cout << "  - Vertices e cores correspondentes:\n";
       for (size_t i = 0; i < coresVertices.size(); ++i)
       {
-        string rotulo = (i < rotulos.size()) ? rotulos[i] : to_string(i);
-        cout << "      Vertice [" << i << "] " << rotulo << " -> Cor " << coresVertices[i] << "\n";
+        string rotulo = (i < rotulos.size() && !rotulos[i].empty()) ? rotulos[i] : to_string(i);
+        cout << "      Vertice " << rotulo << " -> Cor " << coresVertices[i] << "\n";
       }
     }
   }

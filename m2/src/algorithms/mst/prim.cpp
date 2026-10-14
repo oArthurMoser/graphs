@@ -41,23 +41,20 @@ ResultadoAGM agmPrim(Graph &grafo, int verticeInicial)
 
   auto inicio = chrono::high_resolution_clock::now();
 
-  // Controle Q: true indica que o vertice ainda pertence a Q
+  // Passo 1: Iniciar conjunto de controle Q e remover o vertice inicial
   vector<bool> pertenceAoConjuntoQ(n, true);
-
-  // Remove vertice inicial de Q
   pertenceAoConjuntoQ[verticeInicial] = false;
   int verticesRestantesEmQ = n - 1;
 
-  // Min-Heap com as arestas que cruzam o corte
+  // Passo 2: Iniciar fila de prioridade com as arestas que cruzam o corte a partir do vertice inicial
   priority_queue<ArestaCandidata, vector<ArestaCandidata>, greater<ArestaCandidata>> filaPrioridade;
-
   for (int vizinho : grafo.neighbors(verticeInicial))
   {
     float peso = grafo.edgeWeight(verticeInicial, vizinho);
     filaPrioridade.push({peso, verticeInicial, vizinho});
   }
 
-  // Enquanto Q nao estiver vazio
+  // Passo 3: Enquanto Q nao estiver vazio e houver arestas disponiveis
   while (verticesRestantesEmQ > 0 && !filaPrioridade.empty())
   {
     ArestaCandidata menorAresta = filaPrioridade.top();
@@ -68,13 +65,13 @@ ResultadoAGM agmPrim(Graph &grafo, int verticeInicial)
 
     if (!pertenceAoConjuntoQ[v]) continue;
 
-    // Adiciona aresta a solucao S e remove v de Q
+    // Passo 4: Adicionar aresta a solucao S e remover v de Q
     resultado.arestas.push_back({u, v, menorAresta.peso});
     resultado.pesoTotal += menorAresta.peso;
     pertenceAoConjuntoQ[v] = false;
     --verticesRestantesEmQ;
 
-    // Adiciona novas arestas de v para vertices em Q
+    // Passo 5: Adicionar novas arestas de v para os vertices que ainda estao em Q
     for (int vizinho : grafo.neighbors(v))
     {
       if (pertenceAoConjuntoQ[vizinho])
@@ -85,6 +82,7 @@ ResultadoAGM agmPrim(Graph &grafo, int verticeInicial)
     }
   }
 
+  // Passo 6: Medir tempo de execucao e preencher o resultado
   auto fim = chrono::high_resolution_clock::now();
   resultado.tempoExecucaoUs = chrono::duration<double, micro>(fim - inicio).count();
   resultado.viavel = (verticesRestantesEmQ == 0);

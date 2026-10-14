@@ -81,6 +81,12 @@ void executarBateriaColoracao(const string &caminhoArquivo,
   {
     fb.imprimirResultado(rotulos);
   }
+  else
+  {
+    cout << "[Forca Bruta]\n";
+    cout << "  - Status: Nao executada (grafo com " << grafo->vertexCount()
+         << " vertices excede o limite de seguranca de " << limiteForcaBruta << ")\n";
+  }
   cout << "\n";
 
   // 2. Welsh & Powell
@@ -182,7 +188,7 @@ int main(int argc, char *argv[])
 
   // ================= PARTE 1: COLORAÇÃO =================
   // Parametros: caminho, exibirLista (0 ou 1), exibirMatriz (0 ou 1), limiteForcaBruta (padrao 20, 0 desativa)
-  // executarBateriaColoracao("graph_examples/coloring_s08_house.txt", true, false, 20);
+  executarBateriaColoracao("graph_examples/coloring_s08_house.txt", true, true, 20);
 
   // executarBateriaColoracao("graph_examples/coloring_s08_welsh.txt", false, false, 20);
   // executarBateriaColoracao("graph_examples/coloring_cycle5.txt", false, false, 20);
@@ -190,11 +196,11 @@ int main(int argc, char *argv[])
   // executarBateriaColoracao("graph_examples/coloring_petersen.txt", false, false, 20);
   // executarBateriaColoracao("graph_examples/coloring_medium.txt", false, false, 20);
   // executarBateriaColoracao("graph_examples/coloring_large.txt", false, false, 20);
-  executarBateriaColoracao("graph_examples/coloring_huge.txt", false, false, 20);
+  // executarBateriaColoracao("graph_examples/coloring_huge.txt", false, false, 20);
 
   // ================= PARTE 2: ÁRVORE GERADORA MÍNIMA =================
   // Parametros: caminho, exibirLista (0 ou 1), exibirMatriz (0 ou 1)
-  // executarBateriaAGM("graph_examples/mst_s09_slide.txt", false, false);
+  executarBateriaAGM("graph_examples/mst_s09_slide.txt", false, false);
   // executarBateriaAGM("graph_examples/mst_s09_exercise.txt", false, false);
   // executarBateriaAGM("graph_examples/mst_medium.txt", false, false);
   // executarBateriaAGM("graph_examples/mst_large.txt", false, false);

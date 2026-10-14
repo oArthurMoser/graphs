@@ -72,7 +72,7 @@ ResultadoColoracao coloracaoForcaBruta(Graph &grafo, int limiteVertices)
     return resultado;
   }
 
-  // Limite de seguranca (se limiteVertices <= 0, o limite esta desativado)
+  // Passo 1: Verificar limite de seguranca (se limiteVertices <= 0, limite desativado)
   if (limiteVertices > 0 && n > limiteVertices)
   {
     cerr << "[Forca Bruta] Aviso: Grafo possui " << n
@@ -85,7 +85,7 @@ ResultadoColoracao coloracaoForcaBruta(Graph &grafo, int limiteVertices)
 
   auto inicio = chrono::high_resolution_clock::now();
 
-  // Grafo sem arestas requer apenas 1 cor
+  // Passo 2: Grafo sem arestas requer apenas 1 cor
   if (!possuiArestas(grafo))
   {
     resultado.viavel = true;
@@ -96,7 +96,7 @@ ResultadoColoracao coloracaoForcaBruta(Graph &grafo, int limiteVertices)
     return resultado;
   }
 
-  // Testa k = 2, 3, ... ate encontrar solucao viavel
+  // Passo 3: Testar k = 2, 3, ... ate encontrar solucao viavel por backtracking
   vector<int> cores(n, -1);
   for (int k = 2; k <= n; ++k)
   {
@@ -110,6 +110,7 @@ ResultadoColoracao coloracaoForcaBruta(Graph &grafo, int limiteVertices)
     }
   }
 
+  // Passo 4: Medir tempo de execucao e preencher o resultado
   auto fim = chrono::high_resolution_clock::now();
   resultado.tempoExecucaoUs = chrono::duration<double, micro>(fim - inicio).count();
 

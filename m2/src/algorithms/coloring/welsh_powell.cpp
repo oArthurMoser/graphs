@@ -27,7 +27,7 @@ ResultadoColoracao coloracaoWelshPowell(Graph &grafo)
     listaAdjacencia[i] = grafo.neighbors(i);
   }
 
-  // 1. Ordena os vertices por grau em ordem decrescente
+  // Passo 1: Ordenar os vertices por grau em ordem decrescente
   vector<pair<int, int>> grausVertices(n); // (grau, vertice)
   for (int i = 0; i < n; ++i)
   {
@@ -35,16 +35,16 @@ ResultadoColoracao coloracaoWelshPowell(Graph &grafo)
   }
 
   sort(grausVertices.begin(), grausVertices.end(), [](const auto &a, const auto &b) {
-    if (a.first != b.first) return a.first > b.first;
-    return a.second < b.second;
+    if (a.first != b.first) return a.first > b.first; // Maior grau primeiro
+    return a.second < b.second;                       // Desempate pelo menor indice
   });
 
-  // 2. Inicializa todos os vertices como sem cor (-1)
+  // Passo 2: Inicializar todos os vertices como sem cor (-1)
   vector<int> cores(n, -1);
   int verticesSemCor = n;
   int corAtual = 0;
 
-  // 3. Enquanto houver vertice sem cor, colore com corAtual os nao vizinhos
+  // Passo 3: Enquanto houver vertice sem cor, colorir com corAtual os nao vizinhos
   while (verticesSemCor > 0)
   {
     for (const auto &item : grausVertices)
@@ -71,6 +71,7 @@ ResultadoColoracao coloracaoWelshPowell(Graph &grafo)
     ++corAtual;
   }
 
+  // Passo 4: Medir tempo de execucao e preencher o resultado
   auto fim = chrono::high_resolution_clock::now();
   resultado.tempoExecucaoUs = chrono::duration<double, micro>(fim - inicio).count();
   resultado.viavel = true;

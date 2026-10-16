@@ -188,23 +188,22 @@ int main(int argc, char *argv[])
 
   // ================= PARTE 1: COLORAÇÃO =================
   // Parametros: caminho, exibirLista (0 ou 1), exibirMatriz (0 ou 1), limiteForcaBruta (padrao 20, 0 desativa)
-  executarBateriaColoracao("graph_examples/coloring_s08_house.txt", true, true, 20);
-
-  // executarBateriaColoracao("graph_examples/coloring_s08_welsh.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_cycle5.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_bipartite.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_petersen.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_medium.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_large.txt", false, false, 20);
-  // executarBateriaColoracao("graph_examples/coloring_huge.txt", false, false, 20);
+  executarBateriaColoracao("arquivos_trab/coloracao/C4000-260-X.txt", false, false, 20);
+  // executarBateriaColoracao("arquivos_trab/coloracao/k5.txt", false, false, 20);
+  // executarBateriaColoracao("arquivos_trab/coloracao/k33.txt", false, false, 20);
+  // executarBateriaColoracao("arquivos_trab/coloracao/kquase5.txt", false, false, 20);
+  // executarBateriaColoracao("arquivos_trab/coloracao/r250-66-65.txt", false, false, 20);
+  // executarBateriaColoracao("arquivos_trab/coloracao/r1000-234-234.txt", false, false, 20);
 
   // ================= PARTE 2: ÁRVORE GERADORA MÍNIMA =================
   // Parametros: caminho, exibirLista (0 ou 1), exibirMatriz (0 ou 1)
-  executarBateriaAGM("graph_examples/mst_s09_slide.txt", false, false);
-  // executarBateriaAGM("graph_examples/mst_s09_exercise.txt", false, false);
-  // executarBateriaAGM("graph_examples/mst_medium.txt", false, false);
-  // executarBateriaAGM("graph_examples/mst_large.txt", false, false);
-  // executarBateriaAGM("graph_examples/mst_huge.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/50vertices25%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/50vertices50%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/50vertices100%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/500vertices25%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/500vertices50%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/500vertices100%Arestas.txt", false, false);
+  // executarBateriaAGM("arquivos_trab/agm/1000vertices25%Arestas.txt", false, false);
 
   cout << "######################################################################\n";
   cout << "                 FIM DA EXECUCAO DO TRABALHO M2\n";
